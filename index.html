@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generator PDF Slip Gaji Teknisi Madinah Flash — Penyesuaian Omzet, Akad & Potongan Interaktif.">
+  <meta name="theme-color" content="#000000">
+  <title>Slip Gaji Teknisi · Madinah Flash</title>
+
+  <style>
+    html { background-color: #faf9f7; color: #1c1917; }
+    html[data-theme="dark"] { background-color: #18181b; color: #fafafa; color-scheme: dark; }
+  </style>
+  <script>
+    var t = localStorage.getItem('pandorastack_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tool-core.css">
+  <link rel="stylesheet" href="style.css">
+
+    <!-- Core Libraries (Local Offline with CDN Fallback) -->
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script>window.XLSX || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"><\/script>')</script>
+  <script src="vendor/jspdf.umd.min.js"></script>
+  <script>window.jspdf || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>')</script>
+  <script src="vendor/jszip.min.js"></script>
+  <script>window.JSZip || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"><\/script>')</script>
+  <script src="vendor/FileSaver.min.js"></script>
+  <script>window.saveAs || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"><\/script>')</script>
+  <script src="assets/logos.js"></script>
+
+  <!-- Analytics disabled for standalone -->
+</head>
+
+<body>
+  <main class="container" data-magnetic-ignore>
+    <!-- Topbar & Navigation -->
+    <div class="card-top">
+      <header class="header-container">
+        <div class="header-left">
+          <a href="index.html" class="btn-back" title="Kembali ke Beranda" aria-label="Back to Home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5"></path>
+              <path d="M12 19l-7-7 7-7"></path>
+            </svg>
+          </a>
+          <div class="header">
+            <h1>Slip Gaji Teknisi</h1>
+          </div>
+        </div>
+        <div class="header-right">
+          <span class="badge" id="dataStatusBadge">Belum Ada File</span>
+        </div>
+      </header>
+    </div>
+
+    <div class="card-body">
+      <div class="slip-shell">
+        <p class="slip-desc">
+          Unggah file Excel (sheet <strong>RAW</strong>) untuk menghasilkan slip bagi hasil teknisi Madinah Flash dalam format PDF A4 berpresisi tinggi. Anda dapat menyesuaikan omzet, akad, dan potongan tiap teknisi sebelum mengunduh.
+        </p>
+
+        <!-- Dropzone / File Loader -->
+        <section class="slip-panel">
+          <div class="panel-header">
+            <h2>Unggah File Excel</h2>
+            <button type="button" id="btnResetFile" class="btn-secondary btn-sm" style="display: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              Ganti File
+            </button>
+          </div>
+
+          <div id="dropzone" class="dropzone">
+            <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" hidden>
+            <div class="dropzone-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <p class="dropzone-title">Klik untuk pilih file, atau seret &amp; lepas di sini</p>
+            <p class="dropzone-subtitle">Mendukung format .xlsx, .xls, .csv (Sheet RAW &amp; FINAL didukung otomatis)</p>
+            <div class="dropzone-quick-load" style="margin-top: 14px;">
+              <button type="button" id="btnLoadFolderFile" class="btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="12" y1="18" x2="12" y2="12"></line>
+                  <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                Gunakan Berkas Terbaru: JATIMULYA (24 Agt - 23 Sep 2026)
+              </button>
+            </div>
+          </div>
+
+          <div id="fileInfoBox" class="file-info-box" style="display: none;">
+            <div class="file-info-content">
+              <div class="file-icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+              </div>
+              <div class="file-meta">
+                <div class="file-name" id="displayFileName">-</div>
+                <div class="file-details">
+                  Sheet: 
+                  <select id="sheetSelector" class="sheet-select-inline" style="display: none;"></select>
+                  <span id="displaySheetName" class="highlight-text">-</span> &bull; 
+                  Teknisi: <span id="displayTotalTeknisi" class="highlight-text">0</span> orang
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Content Area (shown when file is loaded) -->
+        <div id="mainContentArea" style="display: none;">
+          <!-- Settings Card (Compact) -->
+          <section class="slip-panel compact-panel">
+            <div class="settings-grid">
+              <div class="form-group">
+                <label for="periodeInput">Label Periode Gaji</label>
+                <input type="text" id="periodeInput" class="form-control form-control-sm" placeholder="Contoh: 24 Juli 2026 – 23 Agustus 2026">
+              </div>
+
+              <div class="form-group">
+                <label>Format File ZIP</label>
+                <div class="radio-group compact-radio">
+                  <label class="radio-label">
+                    <input type="radio" name="zipFormat" value="folder" checked>
+                    <span>Folder per cabang</span>
+                  </label>
+                  <label class="radio-label">
+                    <input type="radio" name="zipFormat" value="zip">
+                    <span>ZIP per cabang</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="catatanInput">Catatan pada Slip (Opsional)</label>
+                <input type="text" id="catatanInput" class="form-control form-control-sm" placeholder="Catatan tambahan pada slip...">
+              </div>
+            </div>
+          </section>
+
+          <!-- Stat Cards -->
+          <section class="stats-row">
+            <div class="stat-card">
+              <span class="stat-label">Total Teknisi</span>
+              <span class="stat-value" id="statTeknisiCount">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Cabang</span>
+              <span class="stat-value" id="statCabangCount">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Bruto</span>
+              <span class="stat-value text-accent" id="statBrutoTotal">Rp 0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Potongan</span>
+              <span class="stat-value text-danger" id="statPotonganTotal">Rp 0</span>
+            </div>
+            <div class="stat-card highlight">
+              <span class="stat-label">Total Nett</span>
+              <span class="stat-value text-success" id="statNettTotal">Rp 0</span>
+            </div>
+          </section>
+
+          <!-- Interactive Adjustment Section -->
+          <section class="slip-panel">
+            <div class="panel-header compact-header">
+              <div class="panel-title-with-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="panel-icon">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <h2>Penyesuaian Data Omzet &amp; Potongan</h2>
+              </div>
+            </div>
+
+            <div class="adjuster-selector-row">
+              <div class="form-group flex-1">
+                <label for="teknisiSelect">Pilih Teknisi:</label>
+                <select id="teknisiSelect" class="form-control form-control-sm">
+                  <!-- Dynamically populated -->
+                </select>
+              </div>
+              <div class="adjuster-actions">
+                <button type="button" id="btnPreviewSelected" class="btn-secondary btn-sm">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  Preview Slip
+                </button>
+                <button type="button" id="btnDownloadSelected" class="btn-secondary btn-sm">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Unduh PDF
+                </button>
+              </div>
+            </div>
+
+            <!-- Active Technician Badge & Summary -->
+            <div class="adjuster-active-bar" id="activeTeknisiBar">
+              <div class="active-profile">
+                <span class="active-name" id="activeTeknisiName">-</span>
+                <span class="active-cabang" id="activeTeknisiCabang">-</span>
+              </div>
+              <div class="active-totals">
+                <span class="tot-item">Bruto: <strong id="activeBrutoVal">Rp 0</strong></span>
+                <span class="tot-divider">&bull;</span>
+                <span class="tot-item">Potongan: <strong id="activePotVal" class="text-danger">Rp 0</strong></span>
+                <span class="tot-divider">&bull;</span>
+                <span class="tot-item highlight-pill">Nett: <strong id="activeNettVal" class="text-success">Rp 0</strong></span>
+              </div>
+            </div>
+
+            <!-- Tabs: Pendapatan vs Potongan -->
+            <div class="adjuster-tabs">
+              <button type="button" class="tab-btn active" data-tab="tabKualifikasi">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Pendapatan / Kualifikasi
+              </button>
+              <button type="button" class="tab-btn" data-tab="tabPotongan">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="6" cy="6" r="3"></circle>
+                  <circle cx="6" cy="18" r="3"></circle>
+                  <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+                  <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+                  <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+                </svg>
+                Potongan
+              </button>
+            </div>
+
+            <div class="tab-content active" id="tabKualifikasi">
+              <div class="table-responsive">
+                <table class="edit-table">
+                  <thead>
+                    <tr>
+                      <th>Kategori</th>
+                      <th class="col-num">Omzet (Rp)</th>
+                      <th class="col-num">Akad (%)</th>
+                      <th class="col-num">Bagi Hasil (Rp)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="kualifikasiTableBody">
+                    <!-- Rows dynamically generated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="tab-content" id="tabPotongan">
+              <div class="table-responsive">
+                <table class="edit-table">
+                  <thead>
+                    <tr>
+                      <th>Jenis Potongan</th>
+                      <th class="col-num">Jumlah Potongan (Rp)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="potonganTableBody">
+                    <!-- Rows dynamically generated -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- Summary Table of All Technicians -->
+          <section class="slip-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Daftar Ringkasan Slip Gaji</h2>
+                <p class="panel-desc">Seluruh data teknisi siap dicetak. Gunakan pencarian untuk memfilter data.</p>
+              </div>
+              <div class="table-search-wrap">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="search" id="tableSearchInput" placeholder="Cari nama atau cabang..." class="form-control-sm">
+              </div>
+            </div>
+
+            <div class="table-responsive summary-table-wrap">
+              <table class="data-table" id="summaryTable">
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">No</th>
+                    <th>Nama Teknisi</th>
+                    <th>Cabang</th>
+                    <th class="col-num">Bruto Bagi Hasil</th>
+                    <th class="col-num">Total Potongan</th>
+                    <th class="col-num">Nett Bagi Hasil</th>
+                    <th style="width: 140px; text-align: center;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="summaryTableBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Batch Actions Footer -->
+          <section class="batch-action-bar">
+            <div class="batch-info">
+              <span id="batchCountLabel">0 slip PDF siap di-generate</span>
+            </div>
+            <div class="batch-buttons">
+              <button type="button" id="btnDownloadZip" class="btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Unduh Semua Slip Gaji (.ZIP)
+              </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal Preview Slip -->
+  <div id="previewModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h3 id="previewModalTitle">Preview Slip Gaji</h3>
+          <span class="modal-subtitle" id="previewModalSubtitle">-</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="btnDownloadFromModal" class="btn-primary btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Unduh PDF
+          </button>
+          <button type="button" id="btnCloseModal" class="btn-icon" aria-label="Tutup">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="slip-paper-wrapper">
+          <div id="slipPaper" class="slip-paper">
+            <!-- Rendered visual slip layout -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Overlay for ZIP Generation -->
+  <div id="progressOverlay" class="progress-overlay" style="display: none;">
+    <div class="progress-card">
+      <div class="spinner"></div>
+      <h3 id="progressTitle">Menyusun Berkas PDF...</h3>
+      <p id="progressDesc" class="progress-desc">Memproses 0 dari 0 slip</p>
+      <div class="progress-bar-wrap">
+        <div id="progressBar" class="progress-bar" style="width: 0%;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script defer src="site-ui.js"></script>
+</body>
+
+</html>
