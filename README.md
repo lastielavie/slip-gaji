@@ -17,6 +17,6 @@ Aplikasi web standalone untuk membuat slip bagi hasil teknisi Madinah Flash dala
    - Klik **Unduh Semua Slip Gaji (.ZIP)** untuk men-generate seluruh slip gaji semua teknisi sekaligus dalam arsip ZIP (pilihan folder per cabang atau zip per cabang).
 
 ## Fitur & Keunggulan Standalone:
-- **100% Offline**: Seluruh dependensi (SheetJS XLSX, jsPDF, JSZip, FileSaver, aset logo base64) sudah disertakan secara lokal di dalam folder endor/ dan ssets/. Tidak membutuhkan koneksi internet.
+- **100% Offline**: Seluruh dependensi (SheetJS XLSX, jsPDF, JSZip, FileSaver, aset logo base64) sudah disertakan secara lokal di dalam folder vendor/ dan assets/. Tidak membutuhkan koneksi internet.
 - **Portabel**: Dapat disimpan di flashdisk, Google Drive, atau folder lokal dan langsung dijalankan di komputer mana pun tanpa perlu install Node.js, Python, atau web server.
 - **Desain & Tema Lengkap**: Dilengkapi dengan fitur pemilih tema warna (Light/Dark mode) dari Pandora Stack.
